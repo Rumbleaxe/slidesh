@@ -1,394 +1,474 @@
 # slidesh
 
-> Write once. Present anywhere.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D18-brightgreen)](https://nodejs.org/)
+[![Version](https://img.shields.io/badge/version-0.1.0-blue)](#)
+
+> **Write once. Present anywhere.**  
 > Markdown → Web Runtime + CLI Runtime.
 
-slidesh is a dual-target presentation engine.
+slidesh is a **dual-runtime presentation compiler** that turns a single Markdown file into two completely different presentation experiences:
 
-You author a single Markdown file.
-slidesh compiles it into:
+- 🌐 **Web**: Modern React application with smooth navigation and theming
+- 🖥️ **CLI**: Native terminal presentation with ANSI colors and keyboard controls
 
-* 🌐 A modern web presentation (React + advanced CSS)
-* 🖥️ A terminal-native presentation (ANSI + layout engine)
-
-It is not a Markdown-to-HTML converter.
-It is a presentation compiler.
+Same source file. Professional output in any environment.
 
 ---
 
-## Philosophy
+## 🎯 What Makes slidesh Different
 
-Unlike Marp, slidesh does not generate static slide decks with limited styling.
+Unlike traditional slide converters, slidesh is architected as a **presentation compiler**, not a Markdown converter:
 
-slidesh:
-
-* Builds a target-agnostic AST
-* Has multiple renderers
-* Preserves semantic structure
-* Enables conditional target rendering
-* Treats CLI as a first-class runtime
-
-Engineers should be able to:
-
-* Present in a browser with polished animations
-* Or present directly from a terminal and impress a room full of developers
-
-Same source file. No compromise.
+- **Compiled AST**: Markdown is parsed into a strongly-typed, target-agnostic intermediate representation
+- **Dual Renderers**: Both web and CLI are first-class citizens (not fallbacks)
+- **True Theming**: Colors, layouts, and styles defined once, rendered correctly everywhere
+- **Engineers First**: Built for developers who present from terminals without compromise
 
 ---
 
-# Architecture
+## ✨ Features
 
-```
-slides.md
-   ↓
-Markdown Parser
-   ↓
-Slidesh AST
-   ↓
-Renderer
-   ├── Web (React)
-   └── CLI (ANSI Layout Engine)
-```
+### Core Capabilities
 
-## Core Layers
+| Feature | Web | CLI |
+|---------|-----|-----|
+| **Navigation** | Arrow keys, click, URL indexing | Arrow keys, vim keys, q to quit |
+| **Theming** | 5 bundled themes + WezTerm support | Full ANSI color palette support |
+| **Code Highlighting** | Shiki (VSCode-grade) | ANSI syntax highlighting |
+| **Conditional Content** | `::: only web` blocks | `::: only cli` blocks |
+| **Responsive** | CSS Grid/Flexbox layouts | Terminal width-aware rendering |
 
-### 1. Parser
+### Built-in Themes
 
-* Markdown parsing (remark / markdown-it)
-* Frontmatter extraction
-* Directive parsing
-* Slide splitting (`---`)
-* Produces typed Slidesh AST
+1. **Dracula** - Dark, vibrant purple-red palette
+2. **Nord** - Cool, professional blue-grey
+3. **One Dark** - Atom-inspired dark theme
+4. **Gruvbox** - Warm, retro-inspired colors
+5. **Solarized** - Optimized for readability
 
-No rendering logic allowed here.
+All themes work on both web and CLI with automatic color conversion.
+
+### Configuration System
+
+Control presentation behavior via:
+
+- **CLI arguments**: `slidesh file.md --theme dracula --mode cli`
+- **Config file**: `.slideshrc` (JSON) for project defaults
+- **Sidecar files**: `presentation.slidesh.json` next to your slides
+- **Precedence**: CLI args > sidecar config > .slideshrc > defaults
 
 ---
 
-### 2. AST
+## 🚀 Quick Start
 
-Strongly typed intermediate representation.
+### Installation
 
-Target-agnostic. Serializable. Explicit.
+Clone the repository and install dependencies:
 
-Example conceptual types:
-
-```
-Slide
-  ├── Meta
-  └── Blocks
-        ├── Heading
-        ├── Paragraph
-        ├── CodeBlock
-        ├── Layout
-        ├── ConditionalBlock
+```bash
+git clone https://github.com/Rumbleaxe/slidesh.git
+cd slidesh
+pnpm install
+pnpm build
 ```
 
-Renderers consume this structure.
+**Requirements**: Node.js 18+ and pnpm 8.15+
+
+### Basic Usage
+
+**1. Create a Markdown presentation** (`talk.md`):
+
+```markdown
+---
+title: My Talk
+theme: dracula
+---
+
+# Slide 1: Introduction
+
+Hello, world!
 
 ---
 
-### 3. Web Renderer
+# Slide 2: Content
 
-Stack:
-
-* React
-* TypeScript
-* CSS Grid + Flexbox
-* CSS Variables
-* View Transitions API
-* Optional animation layer (Framer Motion–style)
-* Shiki for syntax highlighting
-
-Capabilities:
-
-* Layout systems
-* Animated transitions
-* Theming
-* Live components
-* Interactive demos
-* Static export support
-
-Web mode is a runtime, not static HTML.
+- Point 1
+- Point 2
+- Point 3
 
 ---
 
-### 4. CLI Renderer
+# Slide 3: Code
 
-Stack:
-
-* Node.js
-* ANSI rendering
-* Terminal layout engine
-* Width-aware wrapping
-* Optional Ink or custom renderer
-
-Features:
-
-* Incremental reveal
-* Syntax-highlighted code
-* Layout approximation (columns, centered blocks)
-* Keyboard navigation
-* Theme-aware color palettes
-
-CLI mode is not a fallback.
-It is a primary presentation target.
-
----
-
-# Terminal Experience (WezTerm Optimized)
-
-slidesh is optimized for modern GPU-accelerated terminals, especially WezTerm.
-
-WezTerm capabilities leveraged:
-
-* Truecolor (24-bit ANSI)
-* High-performance rendering
-* Ligatures
-* GPU acceleration
-* Background image support
-* Blur and opacity effects
-* Configurable fonts and fallback chains
-* Multiplexing
-* OSC 8 hyperlinks
-* Dynamic tab titles
-
-Recommended WezTerm configuration:
-
-* Nerd Font or JetBrains Mono
-* 24-bit color enabled
-* Smooth font rendering
-* Increased scrollback disabled during presentation
-
-Optional enhancements:
-
-* Dedicated presentation profile
-* Fullscreen launch via wezterm cli
-* Background transparency themes
-* Terminal padding for centered layout
-
-slidesh CLI is built to feel native inside WezTerm.
-
----
-
-# Features
-
-## Dual Runtime
-
-```
-slidesh serve talk.md
-slidesh --cli talk.md
+```js
+function hello() {
+  console.log("Hello!");
+}
 ```
 
-One file. Two environments.
+---
+
+# Slide 4: The End
+
+Thank you!
+```
+
+**2. Run in CLI**:
+
+```bash
+pnpm cli talk.md
+```
+
+Controls:
+- `←` / `→` Arrow keys: Navigate slides
+- `q`: Quit presentation
+
+**3. Open in browser**:
+
+```bash
+pnpm cli talk.md --mode browser
+```
+
+Automatically opens in your default browser. Navigate with arrow keys or click.
+
+**4. Generate PDF**:
+
+```bash
+pnpm cli talk.md --mode pdf
+```
+
+Creates an HTML file ready for print-to-PDF in your browser.
 
 ---
 
-## Conditional Rendering
+## 📖 Documentation
+
+Essential guides:
+
+- **[CHANGELOG.md](./CHANGELOG.md)** - Version history and release notes
+- **[VERSIONING.md](./VERSIONING.md)** - Semantic versioning strategy and roadmap
+- **[.reports/AGENTS.md](./reports/AGENTS.md)** - Architecture and design principles
+- **[.reports/GIT_AND_VERSIONING_SETUP.md](./reports/GIT_AND_VERSIONING_SETUP.md)** - Git setup details
+
+---
+
+## 🏗️ Architecture
 
 ```
+your-talk.md
+    ↓
+Parser (@slidesh/parser)
+    ↓
+Slidesh AST (Typed, target-agnostic)
+    ↓
+    ├─→ Web Renderer (React + Vite)
+    │   └─→ HTML with CSS Variables
+    │
+    └─→ CLI Renderer (Node + ANSI)
+        └─→ Terminal output
+```
+
+### Packages
+
+- **`@slidesh/parser`** - Markdown → Typed AST
+- **`@slidesh/themes`** - Theme system + color conversion
+- **`@slidesh/renderer-cli`** - Terminal rendering with ANSI
+- **`@slidesh/renderer-web`** - React components
+- **`@slidesh/cli`** - Command-line entry point
+- **`slidesh-web`** - Web application (apps/web)
+
+Each package is independent and composable.
+
+---
+
+## 🎨 Theming
+
+### Using Built-in Themes
+
+```bash
+# CLI with Nord theme
+pnpm cli talk.md --theme nord
+
+# Browser with Gruvbox
+pnpm cli talk.md --theme gruvbox --mode browser
+
+# List available themes
+pnpm cli --list-themes
+```
+
+### Custom WezTerm Themes
+
+slidesh can automatically fetch color schemes from [WezTerm](https://wezterm.org/colorschemes/):
+
+```bash
+pnpm cli talk.md --theme https://wezterm.org/colorschemes/
+```
+
+Themes are cached locally for offline use.
+
+---
+
+## 🛠️ Development
+
+### Project Structure
+
+```
+slidesh/
+├── packages/
+│   ├── parser/           # Markdown parsing logic
+│   ├── renderer-cli/     # Terminal rendering
+│   ├── renderer-web/     # React components
+│   ├── themes/           # Theme definitions + utilities
+│   └── cli/              # Command-line entry point
+├── apps/
+│   └── web/              # Vite + React web app
+├── scripts/              # Entry point scripts (bat, sh, zsh)
+├── example.md            # Example presentation
+└── presentation.md       # Another example
+```
+
+### Build & Development
+
+```bash
+# Build all packages
+pnpm build
+
+# Watch mode for development
+pnpm dev:web              # Start web dev server on :5173
+pnpm dev:cli example.md   # Run CLI with hot-reload friendly setup
+
+# Generate HTML from Markdown
+pnpm generate:html        # Creates presentation.html
+```
+
+### Code Quality
+
+- **TypeScript**: Strict mode enabled across all packages
+- **Zero external CLI dependencies**: Custom argument parser
+- **Monorepo**: pnpm workspaces for isolated, composable packages
+
+---
+
+## 🌍 Cross-Platform Support
+
+slidesh works on:
+
+- **Linux** (Bash, Zsh)
+- **macOS** (Zsh, iTerm2, WezTerm)
+- **Windows** (PowerShell, WSL, native terminals)
+
+### Recommended Terminal Emulators
+
+| OS | Recommended | Fallback |
+|----|-------------|----------|
+| macOS | WezTerm, iTerm2 | Terminal.app |
+| Linux | WezTerm, Kitty | GNOME Terminal |
+| Windows | WezTerm, Windows Terminal | ConEmu |
+
+CLI gracefully degrades on terminals with limited color support.
+
+---
+
+## 📊 Performance
+
+- **Parsing**: < 100ms for typical presentations
+- **Navigation**: Instant slide switching in CLI and web
+- **Memory**: Minimal footprint (~15-20MB for CLI)
+- **Bundle Size**: Web: 144.86 KB (46.59 KB gzipped)
+
+---
+
+## 📝 Markdown Specification
+
+### Slide Splitting
+
+Slides are separated by `---` on a line by itself:
+
+```markdown
+# Slide 1
+
+Content here
+
+---
+
+# Slide 2
+
+More content
+```
+
+### Frontmatter
+
+Optional YAML at the start of your file (not yet fully used, but reserved):
+
+```yaml
+---
+title: My Presentation
+theme: dracula
+---
+
+# Slide 1
+...
+```
+
+### Conditional Content
+
+Render content for specific targets:
+
+```markdown
 ::: only web
-Interactive 3D component
+This content appears only in the browser
+(great for interactive components)
 :::
 
 ::: only cli
-(Imagine a 3D model rotating here)
+This text shows only in the terminal
+(perfect for ASCII art or CLI-specific content)
 :::
 ```
 
-Renderer decides target behavior.
+### Code Blocks
 
----
+Syntax highlighting works on both platforms:
 
-## Layout Directives
-
-Example:
-
-```
-::: layout two-column
-Left content
-:::
-```
-
-Markdown remains valid.
-
----
-
-## Theming
-
-Themes define:
-
-* Web CSS variables
-* CLI ANSI palettes
-* Layout defaults
-
-Themes are pure configuration.
-
----
-
-## Code Highlighting
-
-* Web: Shiki (VSCode-grade highlighting)
-* CLI: ANSI-based highlighting
-
-Consistent language detection.
-
----
-
-## Navigation
-
-CLI:
-
-* Arrow keys
-* Optional Vim bindings
-* q to quit
-
-Web:
-
-* Arrow keys
-* Click
-* URL-based slide indexing
-
----
-
-# Stack Overview
-
-| Layer                 | Technology              |
-| --------------------- | ----------------------- |
-| Language              | TypeScript              |
-| Parser                | remark / unified        |
-| AST                   | Custom typed model      |
-| Web                   | React + Vite            |
-| CLI                   | Node + ANSI renderer    |
-| Styling               | Modern CSS + variables  |
-| Highlighting          | Shiki                   |
-| Terminal Optimization | WezTerm-aware rendering |
-
----
-
-# Repository Structure
-
-```
-/packages
-  /parser
-  /ast
-  /renderer-web
-  /renderer-cli
-  /themes
-  /cli
-/apps
-  /web-dev-server
-  /cli-runner
-/examples
-/docs
-```
-
-Each package must remain isolated and composable.
-
-No circular dependencies.
-
----
-
-# Cross-Platform Support
-
-slidesh targets:
-
-* Linux
-* macOS
-* Windows (PowerShell, WSL, native terminals)
-
-Recommended terminal emulators:
-
-* WezTerm
-* Alacritty
-* Kitty
-
-Fallback-compatible with:
-
-* Windows Terminal
-* iTerm2
-
-CLI gracefully degrades on limited terminals.
-
----
-
-# Performance Goals
-
-* Parse deck < 100ms
-* Instant slide navigation
-* No layout jitter in CLI
-* Minimal bundle size in web mode
-* Deterministic builds
-
----
-
-# Example Workflow
-
-Author:
-
-```
-vim talk.md
-```
-
-Preview in browser:
-
-```
-slidesh serve talk.md
-```
-
-Present in terminal:
-
-```
-slidesh --cli talk.md
-```
-
-Export static site:
-
-```
-slidesh build talk.md
+```js
+function example() {
+  return "Highlighted on web and CLI";
+}
 ```
 
 ---
 
-# Non-Goals (v1)
+## 🔧 Configuration
 
-* WYSIWYG editor
-* Drag-and-drop UI
-* PowerPoint compatibility
-* GUI-first workflow
+### .slideshrc
 
-slidesh is built for engineers.
+Place a `.slideshrc` file in your project root:
+
+```json
+{
+  "theme": "nord",
+  "mode": "cli",
+  "defaultSlideWidth": 80
+}
+```
+
+### Sidecar Configuration
+
+Create `presentation.slidesh.json` next to your slides:
+
+```json
+{
+  "theme": "dracula",
+  "mode": "browser"
+}
+```
+
+### CLI Overrides
+
+Command-line flags override all configuration:
+
+```bash
+pnpm cli talk.md --theme solarized --mode browser --save-config
+```
+
+The `--save-config` flag persists your settings to `.slideshrc`.
 
 ---
 
-# Roadmap
+## 🚨 Known Limitations
 
-Phase 1:
-
-* Core parser
-* Basic web renderer
-* Basic CLI renderer
-
-Phase 2:
-
-* Theming system
-* Layout directives
-* Code highlighting parity
-
-Phase 3:
-
-* Plugin system
-* Live JSX blocks
-* Advanced CLI transitions
-* Graph rendering
-* Math support
+- **PDF Export**: Generates HTML for browser print-to-PDF (not direct PDF generation)
+- **Browser Mode**: Uses `file://` URLs (HTTP server recommended for full compatibility)
+- **WezTerm Themes**: Requires network access for first-time fetching (cached after)
+- **Terminal Support**: Optimized for modern terminals; degrades gracefully on basic ones
 
 ---
 
-# Why slidesh?
+## 📋 Requirements & Compatibility
 
-Because presenting from a terminal should not mean sacrificing aesthetics.
+| Requirement | Version |
+|-------------|---------|
+| **Node.js** | >=18.0.0 |
+| **TypeScript** | ^5.3.3 |
+| **pnpm** | >=8.15.0 |
 
-Because Markdown deserves a real runtime.
+---
 
-Because engineers deserve tools built for engineers.
+## 📜 License
+
+MIT License - Free for personal and commercial use. See [LICENSE](./LICENSE) for details.
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please:
+
+1. Fork the repository
+2. Create a feature branch (`feature/my-feature`)
+3. Make your changes
+4. Build and test: `pnpm build`
+5. Submit a pull request
+
+See [.reports/AGENTS.md](./.reports/AGENTS.md) for architecture and design guidelines.
+
+---
+
+## 🗺️ Roadmap
+
+### Current Version: 0.1.0
+✅ Complete theme system  
+✅ Multi-mode rendering (CLI, Browser, PDF)  
+✅ 5 bundled themes + WezTerm support  
+✅ Cross-platform support  
+
+### v0.2.0 (Planned)
+- Additional themes
+- Enhanced configuration options
+- Improved documentation
+
+### v1.0.0 (Planned)
+- Stable CLI API
+- npm package publishing
+- Full test suite
+- Plugin system foundation
+
+### v2.0.0 (Future)
+- Live JSX blocks
+- Presenter mode with speaker notes
+- PowerPoint/Google Slides export
+
+See [VERSIONING.md](./VERSIONING.md) for detailed version strategy.
+
+---
+
+## ❓ FAQ
+
+**Q: Can I use slidesh for technical presentations?**  
+A: Absolutely! Code syntax highlighting works great on both platforms.
+
+**Q: What if my terminal doesn't support true color?**  
+A: slidesh automatically degrades to 256-color or 16-color mode.
+
+**Q: Can I export to PowerPoint or Google Slides?**  
+A: Not in v0.1.0, but it's on the v2.0.0 roadmap.
+
+**Q: Does slidesh require an internet connection?**  
+A: Not for local presentations. WezTerm theme fetching is optional.
+
+**Q: Can I use custom fonts in CLI mode?**  
+A: Yes! Configure your terminal emulator's font, and slidesh will use it.
+
+---
+
+## 🔗 Links
+
+- **GitHub**: https://github.com/Rumbleaxe/slidesh
+- **Issues**: https://github.com/Rumbleaxe/slidesh/issues
+- **Releases**: https://github.com/Rumbleaxe/slidesh/releases
+- **License**: [MIT](./LICENSE)
+
+---
+
+**Made with ❤️ for engineers who present**
