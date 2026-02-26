@@ -34,98 +34,394 @@
 <body>
   <div class="slides-container">
     <div class="slide">
-<p>title: slidesh</p>
-<p>author: Your Name</p>
-<p>theme: default</p>
-      <div class="slide-number">Slide 1 / 10</div>
+<p>title: slidesh Feature Showcase</p>
+<p>theme: dracula</p>
+      <div class="slide-number">Slide 1 / 24</div>
     </div>
     <div class="slide">
-<h1>slidesh</h1>
-<p>Write once. Present anywhere.</p>
-<li>Markdown as source</li>
-<li>Web runtime</li>
-<li>CLI runtime</li>
-      <div class="slide-number">Slide 2 / 10</div>
+<h1>slidesh Feature Showcase</h1>
+<h2>A Dual-Runtime Presentation Engine</h2>
+<p>Write once. Present anywhere.</p>
+      <div class="slide-number">Slide 2 / 24</div>
     </div>
     <div class="slide">
-<h1>The Problem</h1>
-<p>Engineers use tools like Marp.</p>
-<p>But:</p>
-<li>Limited theming</li>
-<li>Static output</li>
-<li>Weak CLI experience</li>
-<li>No real runtime model</li>
-<p>We want something better.</p>
-      <div class="slide-number">Slide 3 / 10</div>
+<h1>Visual Content: Images</h1>
+<p>![Embedded Image](./image.jpg)</p>
+<p>This slide demonstrates image rendering:</p>
+<li>**Web**: Full image display with responsive scaling</li>
+<li>**CLI**: Image rendering in WezTerm and compatible terminal emulators</li>
+<li>**Cross-platform**: Works on macOS, Linux, Windows</li>
+      <div class="slide-number">Slide 3 / 24</div>
     </div>
     <div class="slide">
-<h1>The Idea</h1>
-      <div class="slide-number">Slide 4 / 10</div>
-    </div>
-    <div class="slide">
-<h1>Target-Aware Rendering</h1>
-      <div class="slide-number">Slide 5 / 10</div>
-    </div>
-    <div class="slide">
-<h1>Architecture</h1>
-<pre><code>Markdown
-   ↓
-Parser
-   ↓
-Slidesh AST
-   ↓
-Renderer
-   ├── Web
-   └── CLI</code></pre>
-<li>Target-agnostic AST</li>
-<li>Renderer-specific behavior</li>
-<li>Deterministic output</li>
-      <div class="slide-number">Slide 6 / 10</div>
-    </div>
-    <div class="slide">
-<h1>Code Highlighting Example</h1>
-<pre><code>type Slide = {
-  id: string
-  meta: SlideMeta
-  blocks: Block[]
+<h1>Code Highlighting</h1>
+<p>Syntax-highlighted code works identically on web and CLI.</p>
+<p>JavaScript example:</p>
+<pre><code>function slideshow() {
+  console.log(&quot;Hello from slidesh!&quot;);
+  return true;
 }</code></pre>
-<li>Strict typing</li>
-<li>No implicit state</li>
-<li>Renderer isolation</li>
-      <div class="slide-number">Slide 7 / 10</div>
+<p>Python example:</p>
+<pre><code>def greet(name):
+    print(f&quot;Welcome, {name}!&quot;)
+    return True
+
+greet(&quot;slidesh&quot;)</code></pre>
+<p>TypeScript example:</p>
+<pre><code>interface Slide {
+  id: string;
+  content: string;
+  theme?: string;
+}
+
+const slide: Slide = {
+  id: &quot;1&quot;,
+  content: &quot;Hello, world!&quot;
+};</code></pre>
+      <div class="slide-number">Slide 4 / 24</div>
     </div>
     <div class="slide">
-<h1>CLI Demo</h1>
-<p>Run:</p>
-<pre><code>slidesh --cli mvp.md</code></pre>
-<p>Navigate:</p>
-<li>← →</li>
-<li>↑ ↓</li>
-<li>q to quit</li>
-<p>Optimized for modern terminals like WezTerm.</p>
-      <div class="slide-number">Slide 8 / 10</div>
+<h1>Navigation &amp; Controls</h1>
+<p>Navigate presentations seamlessly:</p>
+<p>**CLI Mode**:</p>
+<li>`→` Arrow Right: Next slide</li>
+<li>`←` Arrow Left: Previous slide</li>
+<li>`j` / `k`: Optional Vim keys for navigation</li>
+<li>`q`: Quit presentation</li>
+<p>**Web Mode**:</p>
+<li>`→` / `←` Arrow keys: Navigate slides</li>
+<li>Click: Navigate with mouse</li>
+<li>URL indexing: Jump to specific slides</li>
+<p>Current slide position is always displayed.</p>
+      <div class="slide-number">Slide 5 / 24</div>
     </div>
     <div class="slide">
-<h1>Roadmap</h1>
-<p>Phase 1:</p>
-<li>Parser</li>
-<li>Basic renderers</li>
-<li>Slide navigation</li>
-<p>Phase 2:</p>
-<li>Themes</li>
-<li>Layout directives</li>
-<li>Code highlighting parity</li>
-<p>Phase 3:</p>
-<li>Plugin system</li>
-<li>Live components</li>
-<li>Advanced transitions</li>
-      <div class="slide-number">Slide 9 / 10</div>
+<h1>Configuration &amp; Themes</h1>
+<p>slidesh supports powerful configuration:</p>
+<p>**Available Themes**:</p>
+<p>1. **Dracula** - Dark purple and vibrant colors</p>
+<p>2. **Nord** - Cool, professional blue-grey</p>
+<p>3. **One Dark** - Atom-inspired dark theme</p>
+<p>4. **Gruvbox** - Warm, retro-inspired colors</p>
+<p>5. **Solarized** - Optimized for readability</p>
+<p>**Select a theme**:</p>
+<pre><code>pnpm cli presentation.md --theme nord
+pnpm cli presentation.md --theme gruvbox --mode browser</code></pre>
+<p>**Configuration files**:</p>
+<li>`.slideshrc` - Project defaults (JSON format)</li>
+<li>`presentation.slidesh.json` - Per-presentation settings</li>
+<li>CLI arguments - Override everything else</li>
+      <div class="slide-number">Slide 6 / 24</div>
     </div>
     <div class="slide">
-<h1>slidesh</h1>
-<p>Minimal. Deterministic. Hackable.</p>
-<p>Thank you.</p>
-      <div class="slide-number">Slide 10 / 10</div>
+<h1>Markdown Features</h1>
+<p>slidesh preserves standard Markdown syntax:</p>
+<h2>Headings</h2>
+<p>Multiple heading levels for semantic structure.</p>
+<h3>Sub-headings</h3>
+<p>Organize content hierarchically.</p>
+<p>**Bold text** and *italic text* are fully supported.</p>
+<li>Unordered lists</li>
+<li>Work on both</li>
+<li>Web and CLI</li>
+<p>1. Numbered lists</p>
+<p>2. Are also supported</p>
+<p>3. With proper formatting</p>
+<p>&gt; Block quotes look great on any platform</p>
+<p>&gt; and help emphasize important points.</p>
+      <div class="slide-number">Slide 7 / 24</div>
+    </div>
+    <div class="slide">
+<h1>Web-Only Content</h1>
+      <div class="slide-number">Slide 8 / 24</div>
+    </div>
+    <div class="slide">
+<h1>CLI-Only Content</h1>
+<p>This feature enables truly optimized presentations for each platform without maintaining separate files.</p>
+      <div class="slide-number">Slide 9 / 24</div>
+    </div>
+    <div class="slide">
+<h1>Cross-Platform Support</h1>
+<p>slidesh runs on all major platforms:</p>
+<p>**Desktop Operating Systems**:</p>
+<li>🍎 macOS (10.14+)</li>
+<li>🐧 Linux (all distributions)</li>
+<li>🪟 Windows (PowerShell, WSL, native terminals)</li>
+<p>**Terminal Emulators** (Recommended):</p>
+<li>WezTerm (GPU-accelerated, best support)</li>
+<li>Alacritty (High performance)</li>
+<li>Kitty (Modern, feature-rich)</li>
+<li>iTerm2 (macOS, highly customizable)</li>
+<li>Windows Terminal (Windows native)</li>
+<p>**Color Support**:</p>
+<li>24-bit Truecolor (WezTerm, modern terminals)</li>
+<li>256-color ANSI (Wide support)</li>
+<li>16-color fallback (Legacy terminals)</li>
+<p>slidesh automatically detects and adapts to your environment!</p>
+      <div class="slide-number">Slide 10 / 24</div>
+    </div>
+    <div class="slide">
+<h1>Multiple Output Modes</h1>
+<p>slidesh supports three distinct presentation modes:</p>
+<p>**CLI Mode** (Default):</p>
+<pre><code>pnpm cli presentation.md</code></pre>
+<p>Perfect for:</p>
+<li>Terminal presentations</li>
+<li>Live coding demos</li>
+<li>Engineering talks</li>
+<li>Remote presentations via SSH</li>
+<p>**Browser Mode**:</p>
+<pre><code>pnpm cli presentation.md --mode browser</code></pre>
+<p>Great for:</p>
+<li>Polished presentations</li>
+<li>Conference talks</li>
+<li>Web-based sharing</li>
+<li>Screen recording</li>
+<p>**PDF Mode**:</p>
+<pre><code>pnpm cli presentation.md --mode pdf</code></pre>
+<p>Use for:</p>
+<li>Offline viewing</li>
+<li>Email sharing</li>
+<li>Print-to-PDF export</li>
+<li>Document archives</li>
+      <div class="slide-number">Slide 11 / 24</div>
+    </div>
+    <div class="slide">
+<h1>Compiler Architecture</h1>
+<p>slidesh is fundamentally different from converters:</p>
+<pre><code>Markdown File
+      ↓
+Parser Layer (@slidesh/parser)
+      ↓
+Target-Agnostic AST
+(Strongly Typed, Serializable)
+      ↓
+    ┌─────────────────┬──────────────────┐
+    ↓                 ↓                  ↓
+Web Renderer    CLI Renderer       PDF Generator
+(React + Vite)  (Node + ANSI)    (HTML output)</code></pre>
+<p>This architecture ensures:</p>
+<li>✅ No rendering logic in the parser</li>
+<li>✅ Consistent semantics across targets</li>
+<li>✅ Easy to add new renderers</li>
+<li>✅ Clean separation of concerns</li>
+      <div class="slide-number">Slide 12 / 24</div>
+    </div>
+    <div class="slide">
+<h1>Performance Characteristics</h1>
+<p>slidesh is optimized for speed and efficiency:</p>
+<p>**Parsing**:</p>
+<li>Typical presentation: &lt; 100ms</li>
+<li>Large deck (100+ slides): &lt; 500ms</li>
+<p>**Rendering**:</p>
+<li>CLI slide switch: Instant (&lt; 10ms)</li>
+<li>Web navigation: Instant (&lt; 50ms)</li>
+<li>PDF generation: &lt; 2 seconds</li>
+<p>**Memory Usage**:</p>
+<li>CLI: 15-20 MB per presentation</li>
+<li>Web: 40-60 MB (includes browser)</li>
+<li>Minimal dependency overhead</li>
+<p>**Bundle Size**:</p>
+<li>Web app: 144.86 KB raw</li>
+<li>Web app: 46.59 KB gzipped</li>
+<li>Optimized for fast delivery</li>
+      <div class="slide-number">Slide 13 / 24</div>
+    </div>
+    <div class="slide">
+<h1>Use Cases</h1>
+<p>slidesh excels in many scenarios:</p>
+<p>**Technical Talks**:</p>
+<li>Embedded code with highlighting</li>
+<li>CLI demonstrations</li>
+<li>Quick theme switching</li>
+<p>**Engineering Presentations**:</p>
+<li>Present directly from your terminal</li>
+<li>Impress developer audiences</li>
+<li>Live coding integration</li>
+<p>**Conference Talks**:</p>
+<li>Polish and professionalism</li>
+<li>Multiple monitor support</li>
+<li>Speaker notes (planned v2.0)</li>
+<p>**Remote Presentations**:</p>
+<li>Works over SSH</li>
+<li>No software installation required</li>
+<li>Lightweight and portable</li>
+<p>**Educational Content**:</p>
+<li>Beautiful code examples</li>
+<li>Interactive demonstrations</li>
+<li>Easy to maintain and update</li>
+      <div class="slide-number">Slide 14 / 24</div>
+    </div>
+    <div class="slide">
+<h1>Getting Started</h1>
+<p>Start using slidesh today:</p>
+<p>**1. Install**:</p>
+<pre><code>git clone https://github.com/Rumbleaxe/slidesh.git
+cd slidesh
+pnpm install
+pnpm build</code></pre>
+<p>**2. Create a presentation**:</p>
+<pre><code>cat &gt; my-talk.md &lt;&lt; &#39;EOF&#39;
+# My Talk</code></pre>
+      <div class="slide-number">Slide 15 / 24</div>
+    </div>
+    <div class="slide">
+<h1>First Slide</h1>
+<p>Content here...</p>
+<p>EOF</p>
+<pre><code>
+**3. Present**:</code></pre>
+<p>pnpm cli my-talk.md</p>
+<pre><code>
+**4. Explore modes**:</code></pre>
+<p>pnpm cli my-talk.md --mode browser</p>
+<p>pnpm cli my-talk.md --theme nord</p>
+<p>pnpm cli my-talk.md --list-themes</p>
+<pre><code>
+That&#39;s it! You&#39;re presenting.</code></pre>
+      <div class="slide-number">Slide 16 / 24</div>
+    </div>
+    <div class="slide">
+<h1>The slidesh Philosophy</h1>
+<p>slidesh is built on core principles:</p>
+<p>**1. Markdown is Sacred**</p>
+<li>Standard Markdown syntax</li>
+<li>No proprietary extensions</li>
+<li>Portable across platforms</li>
+<p>**2. Dual-Runtime First**</p>
+<li>CLI is not a fallback</li>
+<li>Web is not the default</li>
+<li>Both are equally important</li>
+<p>**3. Engineer-Focused**</p>
+<li>Built by engineers, for engineers</li>
+<li>No bloat, no magic</li>
+<li>Hackable and transparent</li>
+<p>**4. Zero Compromise**</p>
+<li>Same source file, professional output</li>
+<li>No feature degradation between platforms</li>
+<li>Consistent behavior everywhere</li>
+      <div class="slide-number">Slide 17 / 24</div>
+    </div>
+    <div class="slide">
+<h1>What&#39;s Next?</h1>
+<p>slidesh has an exciting roadmap:</p>
+<p>**v0.2.0** (Planned):</p>
+<li>Additional themes</li>
+<li>Enhanced configuration</li>
+<li>More examples</li>
+<p>**v1.0.0** (Target: Q2 2026):</p>
+<li>Stable CLI API</li>
+<li>npm package publishing</li>
+<li>Full test suite</li>
+<li>Plugin system foundation</li>
+<p>**v2.0.0** (Future):</p>
+<li>Presenter mode with speaker notes</li>
+<li>Live JSX blocks in presentations</li>
+<li>PowerPoint/Google Slides export</li>
+<li>Advanced animations</li>
+<p>See [VERSIONING.md](./VERSIONING.md) for the full roadmap.</p>
+      <div class="slide-number">Slide 18 / 24</div>
+    </div>
+    <div class="slide">
+<h1>Thank You!</h1>
+<p>Thank you for exploring slidesh.</p>
+<p>**Questions?**</p>
+<li>📖 **Docs**: https://github.com/Rumbleaxe/slidesh</li>
+<li>🐛 **Issues**: https://github.com/Rumbleaxe/slidesh/issues</li>
+<li>⭐ **Star on GitHub**: https://github.com/Rumbleaxe/slidesh</li>
+<p>**Remember**: Write once. Present anywhere.</p>
+      <div class="slide-number">Slide 19 / 24</div>
+    </div>
+    <div class="slide">
+<h1>Bonus: ASCII Art Example</h1>
+      <div class="slide-number">Slide 20 / 24</div>
+    </div>
+    <div class="slide">
+<h1>Test Slide: Code Blocks in Different Languages</h1>
+<p>Ruby example:</p>
+<pre><code>def present(topic)
+  puts &quot;Now presenting: #{topic}&quot;
+  yield if block_given?
+end
+
+present(&quot;slidesh&quot;) { puts &quot;Amazing!&quot; }</code></pre>
+<p>Go example:</p>
+<pre><code>package main
+
+import &quot;fmt&quot;
+
+func main() {
+    fmt.Println(&quot;Hello from slidesh!&quot;)
+}</code></pre>
+<p>Bash example:</p>
+<pre><code>#!/bin/bash
+echo &quot;slidesh is awesome!&quot;
+pnpm cli presentation.md --theme dracula</code></pre>
+      <div class="slide-number">Slide 21 / 24</div>
+    </div>
+    <div class="slide">
+<h1>Test Slide: Lists and Formatting</h1>
+<p>**Features Demonstrated So Far**:</p>
+<p>1. ✅ Markdown rendering</p>
+<p>2. ✅ Code syntax highlighting</p>
+<p>3. ✅ Image display</p>
+<p>4. ✅ Conditional content (web/CLI)</p>
+<p>5. ✅ Theming and colors</p>
+<p>6. ✅ Navigation controls</p>
+<p>7. ✅ Multiple output modes</p>
+<p>8. ✅ Cross-platform support</p>
+<p>**Additional Capabilities**:</p>
+<li>Block quotes for emphasis</li>
+<li>Horizontal rules (---)</li>
+<li>Inline code formatting: `pnpm cli`</li>
+<li>Text styling: **bold**, *italic*</li>
+<li>Ordered and unordered lists</li>
+<li>Multi-level heading hierarchy</li>
+      <div class="slide-number">Slide 22 / 24</div>
+    </div>
+    <div class="slide">
+<h1>Test Slide: Complex Markdown</h1>
+<p>Here&#39;s a more complex example combining multiple features:</p>
+<h3>Code with Highlighting</h3>
+<pre><code>interface PresentationConfig {
+  theme: &quot;dracula&quot; | &quot;nord&quot; | &quot;one-dark&quot; | &quot;gruvbox&quot; | &quot;solarized&quot;;
+  mode: &quot;cli&quot; | &quot;browser&quot; | &quot;pdf&quot;;
+  slideWidth?: number;
+}
+
+const config: PresentationConfig = {
+  theme: &quot;dracula&quot;,
+  mode: &quot;cli&quot;
+};</code></pre>
+<h3>Emphasis and Lists</h3>
+<p>The above configuration:</p>
+<p>1. **Selects a theme** from 5 built-in options</p>
+<p>2. **Chooses an output mode** for rendering</p>
+<p>3. **Optionally sets slide width** for CLI rendering</p>
+<p>All of these can be:</p>
+<li>Set via CLI arguments</li>
+<li>Configured in `.slideshrc`</li>
+<li>Stored in presentation-specific files</li>
+      <div class="slide-number">Slide 23 / 24</div>
+    </div>
+    <div class="slide">
+<h1>End of Feature Showcase</h1>
+<p>You&#39;ve now seen slidesh in action!</p>
+<p>**This presentation demonstrates**:</p>
+<li>✨ All core rendering capabilities</li>
+<li>🎨 Theme switching</li>
+<li>📱 Cross-platform support</li>
+<li>🚀 Multiple output modes</li>
+<li>💻 Code syntax highlighting</li>
+<li>🖼️ Image embedding</li>
+<li>🎯 Navigation controls</li>
+<li>⚙️ Configuration system</li>
+<p>**Try it yourself**:</p>
+<pre><code>pnpm cli presentation.md --theme nord
+pnpm cli presentation.md --mode browser
+pnpm cli presentation.md --list-themes</code></pre>
+<p>Enjoy your presentations! 🎉</p>
+      <div class="slide-number">Slide 24 / 24</div>
     </div>
   </div>
 </body>
