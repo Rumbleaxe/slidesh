@@ -10,16 +10,24 @@ export interface CLIRendererOptions {
 
 /**
  * Terminal image protocol detection and rendering
- * Supports: Sixel, iTerm2 inline images, Kitty graphics protocol
+ * Supports: Kitty, iTerm2, Sixel, WezTerm imgcat
  */
 class TerminalImageRenderer {
   private supportsKitty: boolean;
   private supportsIterm2: boolean;
   private supportsSixel: boolean;
+  private supportsWezTerm: boolean;
 
   constructor() {
     const term = process.env.TERM || "";
     const colorterm = process.env.COLORTERM || "";
+    const term_program = process.env.TERM_PROGRAM || "";
+    
+    // WezTerm: Check for WEZTERM environment variable or term program
+    this.supportsWezTerm = 
+      process.env.WEZTERM_EXECUTABLE !== undefined ||
+      term_program.includes("WezTerm") ||
+      term.includes("wezterm");
     
     // Kitty: Check for kitty environment variable
     this.supportsKitty = process.env.KITTY_WINDOW_ID !== undefined;
@@ -37,7 +45,7 @@ class TerminalImageRenderer {
 
   /**
    * Render image using appropriate terminal protocol
-   * Prioritizes Kitty > iTerm2 > Sixel
+   * Prioritizes WezTerm imgcat > Kitty > iTerm2 > Sixel
    */
   renderImage(imagePath: string, maxWidth: number = 80): string[] {
     if (!fs.existsSync(imagePath)) {
@@ -45,7 +53,9 @@ class TerminalImageRenderer {
     }
 
     try {
-      if (this.supportsKitty) {
+      if (this.supportsWezTerm) {
+        return this.renderWezTermImage(imagePath, maxWidth);
+      } else if (this.supportsKitty) {
         return this.renderKittyImage(imagePath, maxWidth);
       } else if (this.supportsIterm2) {
         return this.renderIterm2Image(imagePath, maxWidth);
@@ -58,6 +68,31 @@ class TerminalImageRenderer {
     }
 
     return [];
+  }
+
+  /**
+   * Render image using WezTerm imgcat tool
+   * WezTerm natively supports the imgcat protocol
+   */
+  private renderWezTermImage(imagePath: string, maxWidth: number): string[] {
+    try {
+      const absolutePath = path.resolve(imagePath);
+      // WezTerm imgcat: ESC ] 1337 ; File=inline=1 : base64-data ST
+      const imageData = fs.readFileSync(absolutePath);
+      const base64 = imageData.toString("base64");
+      
+      // Read file size and use smaller dimension for width
+      const imageSize = Math.min(maxWidth, 40);
+      const filename = path.basename(absolutePath);
+      const encodedFilename = Buffer.from(filename).toString("base64");
+      
+      // WezTerm imgcat protocol: OSC 1337 ; File=name=<base64-filename>;width=<width>;height=<height>;inline=1:<base64-data> ST
+      return [
+        `\x1b]1337;File=name=${encodedFilename};width=${imageSize}px;height=${Math.floor(imageSize * 0.75)}px;inline=1:${base64}\x07`
+      ];
+    } catch {
+      return [];
+    }
   }
 
   /**
@@ -121,10 +156,11 @@ class TerminalImageRenderer {
   }
 
   supportsAnyImageProtocol(): boolean {
-    return this.supportsKitty || this.supportsIterm2 || this.supportsSixel;
+    return this.supportsWezTerm || this.supportsKitty || this.supportsIterm2 || this.supportsSixel;
   }
 
   getDetectedProtocol(): string {
+    if (this.supportsWezTerm) return "WezTerm";
     if (this.supportsKitty) return "Kitty";
     if (this.supportsIterm2) return "iTerm2";
     if (this.supportsSixel) return "Sixel";
@@ -167,6 +203,7 @@ export class CLIRenderer {
 
     const lines = slide?.split("\n") ?? [];
     const maxWidth = Math.min(process.stdout.columns || 80, 100);
+    const maxHeight = Math.max(process.stdout.rows || 24, 15) - 1;
 
     // Theme colors
     const borderColor = this.theme
@@ -183,45 +220,63 @@ export class CLIRenderer {
       : chalk.gray;
     const bgColor = this.getBackgroundCode();
 
-    // Start output with background color
+    // Background escape codes
     const bgEscape = `\x1b[48;5;${bgColor}m`;
     const resetEscape = `\x1b[0m`;
-
-    console.log(bgEscape);
-    console.log("");
-    console.log(bgEscape + borderColor("─".repeat(maxWidth)));
-    console.log(
+    
+    // Create full-height slide with background
+    const outputLines: string[] = [];
+    
+    // Top border and info
+    outputLines.push(bgEscape + borderColor("─".repeat(maxWidth)));
+    outputLines.push(
       bgEscape + counterColor(`Slide ${index + 1} / ${this.slides.length}`)
     );
-    console.log(bgEscape + borderColor("─".repeat(maxWidth)));
-    console.log("");
+    outputLines.push(bgEscape + borderColor("─".repeat(maxWidth)));
+    outputLines.push(bgEscape);
 
-    // Try to render background image if available
+    // Render background image if available
+    let imageLineCount = 0;
     if (this.theme?.colors.backgroundImage) {
       const imageLines = this.imageRenderer.renderImage(
         this.theme.colors.backgroundImage,
         maxWidth
       );
       imageLines.forEach((line) => {
-        console.log(bgEscape + line);
+        outputLines.push(bgEscape + line);
+        imageLineCount++;
       });
-      if (imageLines.length > 0) {
-        console.log("");
+      if (imageLineCount > 0) {
+        outputLines.push(bgEscape);
       }
     }
 
+    // Content lines
     lines.forEach((line) => {
       if (line.trim().length > 0) {
-        console.log(bgEscape + textColor(line));
+        outputLines.push(bgEscape + textColor(line));
       } else {
-        console.log(bgEscape);
+        outputLines.push(bgEscape);
       }
     });
 
-    console.log("");
-    console.log(bgEscape + borderColor("─".repeat(maxWidth)));
-    console.log(bgEscape + hintColor("Arrow Keys: Navigate | q: Quit"));
-    console.log(bgEscape + borderColor("─".repeat(maxWidth)));
+    // Calculate remaining space to fill
+    const footerLines = 4; // Top border (3 lines) + content gap + bottom border (3 lines)
+    const contentLines = outputLines.length;
+    const remainingLines = Math.max(0, maxHeight - contentLines - footerLines);
+
+    // Fill remaining space with background
+    for (let i = 0; i < remainingLines; i++) {
+      outputLines.push(bgEscape);
+    }
+
+    // Bottom border and controls
+    outputLines.push(bgEscape + borderColor("─".repeat(maxWidth)));
+    outputLines.push(bgEscape + hintColor("Arrow Keys: Navigate | q: Quit"));
+    outputLines.push(bgEscape + borderColor("─".repeat(maxWidth)));
+
+    // Output all lines with reset at the end
+    outputLines.forEach((line) => console.log(line));
     console.log(resetEscape);
   }
 
