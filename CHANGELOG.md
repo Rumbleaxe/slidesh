@@ -12,6 +12,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/), following [Sema
 - Additional bundled themes
 - Enhanced configuration UI
 - Improved documentation
+- Image rendering in Markdown (parser enhancement)
 
 ### Planned for v1.0.0
 - Stable CLI API guarantee
@@ -24,6 +25,26 @@ Format based on [Keep a Changelog](https://keepachangelog.com/), following [Sema
 - Animations and transitions
 - Presenter mode with speaker notes
 - Live JSX blocks
+
+---
+
+## [0.1.2] — 2026-02-26
+
+### Added
+- **Full-Screen Background Coverage in CLI**: Background color now fills entire slide area (including empty space), not just lines with text
+- **Enhanced WezTerm Support**: 
+  - Improved terminal detection for WezTerm (checks WEZTERM_EXECUTABLE and TERM_PROGRAM)
+  - Added WezTerm imgcat protocol support for image rendering
+  - Base64 encoding and filename encoding for proper protocol compliance
+
+### Changed
+- Updated Terminal Image Support documentation with WezTerm as primary recommendation
+- Improved terminal protocol detection priority (WezTerm now checked first)
+- Better error handling for missing image files
+
+### Fixed
+- CLI background coverage: Terminal height now calculated and background pads entire visible area
+- TypeScript strict mode: Removed unused variable in renderSlide() function
 
 ---
 
