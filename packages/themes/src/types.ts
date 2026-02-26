@@ -37,6 +37,7 @@ export interface Theme {
   source?: 'bundled' | 'wezterm' | 'user';
   colors: {
     background: ThemeColor;
+    backgroundImage?: string; // Path to background image (URL or local path)
     foreground: ThemeColor;
     cursor?: ThemeColor;
     selection?: ThemeColor;

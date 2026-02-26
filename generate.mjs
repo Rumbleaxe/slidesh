@@ -9,6 +9,7 @@ function generateThemeCss(theme) {
   const colors = theme.colors || {};
   const bg = colors.background?.hex || '#ffffff';
   const fg = colors.foreground?.hex || '#000000';
+  const bgImage = colors.backgroundImage ? `url('${colors.backgroundImage}')` : 'none';
   const palette = colors.palette || {};
   const blue = palette.blue?.hex || '#667eea';
   const magenta = palette.magenta?.hex || '#764ba2';
@@ -19,12 +20,23 @@ function generateThemeCss(theme) {
   return `
     :root {
       --slidesh-background: ${bg};
+      --slidesh-background-image: ${bgImage};
       --slidesh-foreground: ${fg};
       --slidesh-primary: ${blue};
       --slidesh-secondary: ${magenta};
       --slidesh-accent: ${cyan};
       --slidesh-code-bg: ${brightBlack};
       --slidesh-border: ${white};
+    }
+    
+    body {
+      background-color: ${bg};
+    }
+    
+    .slide-container {
+      background-color: ${bg};
+      background-image: ${bgImage};
+      color: ${fg};
     }
   `;
 }
