@@ -37,5 +37,8 @@
   "packageManager": "pnpm@8.15.0",
   "engines": {
     "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "puppeteer": "^24.37.5"
   }
 }

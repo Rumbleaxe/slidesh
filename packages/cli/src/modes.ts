@@ -126,7 +126,7 @@ export async function handleBrowserMode(context: ModeContext): Promise<void> {
 
 /**
  * Handle PDF mode
- * Exports presentation as PDF using html2pdf or print-to-PDF
+ * Exports presentation as PDF using Puppeteer (headless browser)
  */
 export async function handlePdfMode(context: ModeContext): Promise<void> {
   const fs = await import('fs');
@@ -151,7 +151,6 @@ export async function handlePdfMode(context: ModeContext): Promise<void> {
     console.log(`Generating PDF with theme: ${context.themeName}...`);
     await execAsync(`node generate.mjs ${context.themeName}`, { cwd: projectRoot });
     
-    // Try to convert HTML to PDF if html2pdf is available
     const htmlFile = path.join(projectRoot, 'presentation.html');
     
     if (!fs.existsSync(htmlFile)) {
@@ -159,19 +158,52 @@ export async function handlePdfMode(context: ModeContext): Promise<void> {
       process.exit(1);
     }
     
-    // Check if html2pdf is installed
+    // Use Puppeteer to convert HTML to PDF
     try {
-      await execAsync('npm list html2pdf 2>/dev/null');
-      console.log(`✓ Generated ${htmlFile}`);
-      console.log(`To convert to PDF, install html2pdf:`);
-      console.log(`  npm install -D html2pdf`);
-      console.log(`Then use: html2pdf input.html output.pdf`);
-    } catch {
-      console.log(`✓ Generated ${htmlFile}`);
-      console.log(`To convert to PDF, use one of:`);
-      console.log(`  1. Web browser: Open ${htmlFile} and print to PDF`);
-      console.log(`  2. Command line: npm install -D html2pdf`);
-      console.log(`  3. Alternative: Use wkhtmltopdf or similar tool`);
+      // @ts-ignore - puppeteer is dynamically imported
+      const puppeteer = await import('puppeteer');
+      
+      const browser = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+      });
+      
+      try {
+        const page = await browser.newPage();
+        const fileUrl = `file://${htmlFile}`;
+        
+        await page.goto(fileUrl, { waitUntil: 'networkidle2' });
+        
+        // Determine output filename based on input markdown filename
+        const inputBasename = path.basename(context.filePath);
+        const outputName = inputBasename.replace(/\.md$/, '.pdf');
+        const outputPath = path.join(fileDir, outputName);
+        
+        // Generate PDF with A4 size, landscape for better code display
+        await page.pdf({
+          path: outputPath,
+          format: 'A4',
+          landscape: true,
+          margin: { top: '0.5in', bottom: '0.5in', left: '0.5in', right: '0.5in' },
+          displayHeaderFooter: true,
+          headerTemplate: '<div style="font-size: 10px; width: 100%; text-align: center;"></div>',
+          footerTemplate: '<div style="font-size: 10px; width: 100%; text-align: center; padding-bottom: 0.5in;"><span class="pageNumber"></span> / <span class="totalPages"></span></div>'
+        });
+        
+        console.log(`✅ Successfully exported PDF: ${outputPath}`);
+        console.log(`   Theme: ${context.themeName}`);
+        console.log(`   Format: A4 Landscape`);
+      } finally {
+        await browser.close();
+      }
+    } catch (puppeteerError) {
+      console.error('Error generating PDF with Puppeteer:', puppeteerError instanceof Error ? puppeteerError.message : String(puppeteerError));
+      console.log('\n📝 Fallback options:');
+      console.log(`1. Use browser print-to-PDF:`);
+      console.log(`   Open ${htmlFile} in your browser and use Ctrl+P (or Cmd+P) to print as PDF`);
+      console.log(`2. Use wkhtmltopdf:`);
+      console.log(`   wkhtmltopdf ${htmlFile} ${path.basename(context.filePath).replace(/\.md$/, '.pdf')}`);
+      process.exit(1);
     }
   } catch (error) {
     console.error('Error generating PDF:', error instanceof Error ? error.message : String(error));
