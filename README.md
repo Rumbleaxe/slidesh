@@ -38,6 +38,8 @@ Unlike traditional slide converters, slidesh is architected as a **presentation 
 | **Code Highlighting** | Shiki (VSCode-grade) | ANSI syntax highlighting |
 | **Conditional Content** | `::: only web` blocks | `::: only cli` blocks |
 | **Responsive** | CSS Grid/Flexbox layouts | Terminal width-aware rendering |
+| **Backgrounds** | Theme background colors | ANSI background colors + images |
+| **Images** | Native image display | Terminal image protocols (Kitty, iTerm2, Sixel) |
 
 ### Built-in Themes
 
@@ -47,7 +49,11 @@ Unlike traditional slide converters, slidesh is architected as a **presentation 
 4. **Gruvbox** - Warm, retro-inspired colors
 5. **Solarized** - Optimized for readability
 
-All themes work on both web and CLI with automatic color conversion.
+All themes include:
+- Full color palettes (16 ANSI colors + hex values)
+- Background colors for all three modes (CLI, Web, PDF)
+- Automatic color conversion for terminal compatibility
+- Optional background image support
 
 ### Configuration System
 
@@ -284,7 +290,13 @@ slidesh works on:
 | Linux | WezTerm, Kitty | GNOME Terminal |
 | Windows | WezTerm, Windows Terminal | ConEmu |
 
-CLI gracefully degrades on terminals with limited color support.
+**Terminal Image Support**:
+- **Kitty Terminal**: Native image rendering via Kitty Graphics Protocol
+- **iTerm2**: Native image rendering via iTerm2 Inline Image Protocol
+- **WezTerm**: Supports both Kitty and Sixel protocols
+- **Other terminals**: Gracefully degrades with ANSI background colors
+
+CLI automatically detects and uses the best available image protocol. See [TERMINAL_IMAGE_SUPPORT.md](./TERMINAL_IMAGE_SUPPORT.md) for details.
 
 ---
 
