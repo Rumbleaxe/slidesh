@@ -1,0 +1,41 @@
+{
+  "name": "slidesh-monorepo",
+  "version": "0.1.0",
+  "description": "Write once. Present anywhere. Markdown to Web + CLI + PDF.",
+  "author": "slidesh Contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_USERNAME/slidesh"
+  },
+  "homepage": "https://github.com/YOUR_USERNAME/slidesh",
+  "bugs": {
+    "url": "https://github.com/YOUR_USERNAME/slidesh/issues"
+  },
+  "keywords": [
+    "presentation",
+    "markdown",
+    "cli",
+    "terminal",
+    "theme",
+    "dual-runtime"
+  ],
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev:web": "cd apps/web && npm run dev",
+    "build:web": "cd apps/web && npm run build",
+    "dev:cli": "node packages/cli/dist/index.js",
+    "cli": "node packages/cli/dist/index.js",
+    "build": "npm --prefix packages/themes run build && npm --prefix packages/parser run build && npm --prefix packages/renderer-cli run build && npm --prefix packages/cli run build && npm --prefix apps/web run build",
+    "generate:html": "node generate.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.3"
+  },
+  "packageManager": "pnpm@8.15.0",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

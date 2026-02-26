@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>slidesh - presentation.md</title>
+  <style>
+    
+    :root {
+      --slidesh-background: #282a36;
+      --slidesh-foreground: #f8f8f2;
+      --slidesh-primary: #bd93f9;
+      --slidesh-secondary: #ff79c6;
+      --slidesh-accent: #8be9fd;
+      --slidesh-code-bg: #4d4d4d;
+      --slidesh-border: #bfbfbf;
+    }
+  
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: linear-gradient(135deg, var(--slidesh-primary) 0%, var(--slidesh-secondary) 100%); min-height: 100vh; padding: 20px; }
+    .slides-container { max-width: 1200px; margin: 0 auto; }
+    .slide { background: var(--slidesh-background); border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); padding: 60px; margin-bottom: 40px; min-height: 600px; display: flex; flex-direction: column; justify-content: center; }
+    .slide-number { text-align: right; color: #999; font-size: 0.9rem; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--slidesh-border); }
+    h1 { font-size: 2.5rem; color: var(--slidesh-secondary); margin-bottom: 30px; margin-top: 20px; }
+    h2 { font-size: 2rem; color: var(--slidesh-primary); margin-bottom: 20px; margin-top: 20px; }
+    h3 { font-size: 1.5rem; color: var(--slidesh-foreground); margin-bottom: 15px; margin-top: 15px; }
+    p { font-size: 1.1rem; line-height: 1.6; color: var(--slidesh-foreground); margin-bottom: 15px; }
+    li { font-size: 1.1rem; line-height: 1.6; color: var(--slidesh-foreground); margin-left: 30px; margin-bottom: 10px; }
+    code { background: var(--slidesh-code-bg); padding: 2px 6px; border-radius: 4px; font-family: "Courier New", monospace; color: var(--slidesh-accent); }
+    pre { background: var(--slidesh-code-bg); color: var(--slidesh-foreground); padding: 15px; border-radius: 8px; overflow-x: auto; margin: 15px 0; font-family: "Courier New", monospace; font-size: 0.95rem; }
+    pre code { background: none; color: inherit; padding: 0; }
+  </style>
+</head>
+<body>
+  <div class="slides-container">
+    <div class="slide">
+<p>title: slidesh</p>
+<p>author: Your Name</p>
+<p>theme: default</p>
+      <div class="slide-number">Slide 1 / 10</div>
+    </div>
+    <div class="slide">
+<h1>slidesh</h1>
+<p>Write once. Present anywhere.</p>
+<li>Markdown as source</li>
+<li>Web runtime</li>
+<li>CLI runtime</li>
+      <div class="slide-number">Slide 2 / 10</div>
+    </div>
+    <div class="slide">
+<h1>The Problem</h1>
+<p>Engineers use tools like Marp.</p>
+<p>But:</p>
+<li>Limited theming</li>
+<li>Static output</li>
+<li>Weak CLI experience</li>
+<li>No real runtime model</li>
+<p>We want something better.</p>
+      <div class="slide-number">Slide 3 / 10</div>
+    </div>
+    <div class="slide">
+<h1>The Idea</h1>
+      <div class="slide-number">Slide 4 / 10</div>
+    </div>
+    <div class="slide">
+<h1>Target-Aware Rendering</h1>
+      <div class="slide-number">Slide 5 / 10</div>
+    </div>
+    <div class="slide">
+<h1>Architecture</h1>
+<pre><code>Markdown
+   ↓
+Parser
+   ↓
+Slidesh AST
+   ↓
+Renderer
+   ├── Web
+   └── CLI</code></pre>
+<li>Target-agnostic AST</li>
+<li>Renderer-specific behavior</li>
+<li>Deterministic output</li>
+      <div class="slide-number">Slide 6 / 10</div>
+    </div>
+    <div class="slide">
+<h1>Code Highlighting Example</h1>
+<pre><code>type Slide = {
+  id: string
+  meta: SlideMeta
+  blocks: Block[]
+}</code></pre>
+<li>Strict typing</li>
+<li>No implicit state</li>
+<li>Renderer isolation</li>
+      <div class="slide-number">Slide 7 / 10</div>
+    </div>
+    <div class="slide">
+<h1>CLI Demo</h1>
+<p>Run:</p>
+<pre><code>slidesh --cli mvp.md</code></pre>
+<p>Navigate:</p>
+<li>← →</li>
+<li>↑ ↓</li>
+<li>q to quit</li>
+<p>Optimized for modern terminals like WezTerm.</p>
+      <div class="slide-number">Slide 8 / 10</div>
+    </div>
+    <div class="slide">
+<h1>Roadmap</h1>
+<p>Phase 1:</p>
+<li>Parser</li>
+<li>Basic renderers</li>
+<li>Slide navigation</li>
+<p>Phase 2:</p>
+<li>Themes</li>
+<li>Layout directives</li>
+<li>Code highlighting parity</li>
+<p>Phase 3:</p>
+<li>Plugin system</li>
+<li>Live components</li>
+<li>Advanced transitions</li>
+      <div class="slide-number">Slide 9 / 10</div>
+    </div>
+    <div class="slide">
+<h1>slidesh</h1>
+<p>Minimal. Deterministic. Hackable.</p>
+<p>Thank you.</p>
+      <div class="slide-number">Slide 10 / 10</div>
+    </div>
+  </div>
+</body>
+</html>
