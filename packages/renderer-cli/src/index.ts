@@ -76,12 +76,24 @@ class TerminalImageRenderer {
    */
   private renderWezTermImage(imagePath: string, maxWidth: number): string[] {
     try {
-      const absolutePath = path.resolve(imagePath);
-      // WezTerm imgcat: ESC ] 1337 ; File=inline=1 : base64-data ST
+      // Try to resolve relative to current working directory
+      let absolutePath = path.resolve(imagePath);
+      
+      // If file doesn't exist, try resolving relative to the current process
+      if (!fs.existsSync(absolutePath) && !path.isAbsolute(imagePath)) {
+        // Try from process.cwd()
+        absolutePath = path.resolve(process.cwd(), imagePath);
+      }
+      
+      // Final check - if still not found, return empty
+      if (!fs.existsSync(absolutePath)) {
+        return [];
+      }
+      
       const imageData = fs.readFileSync(absolutePath);
       const base64 = imageData.toString("base64");
       
-      // Read file size and use smaller dimension for width
+      // Use smaller dimension for width
       const imageSize = Math.min(maxWidth, 40);
       const filename = path.basename(absolutePath);
       const encodedFilename = Buffer.from(filename).toString("base64");
@@ -251,12 +263,36 @@ export class CLIRenderer {
       }
     }
 
-    // Content lines
+    // Content lines - with image extraction from Markdown ![alt](path) syntax
     lines.forEach((line) => {
-      if (line.trim().length > 0) {
-        outputLines.push(bgEscape + textColor(line));
+      // Extract images from Markdown syntax: ![alt text](./path/to/image)
+      const imageRegex = /!\[([^\]]*)\]\(([^)]+)\)/g;
+      let hasImages = false;
+      
+      // Replace image references with image rendering
+      const lineWithImagesProcessed = line.replace(imageRegex, (_match, _alt, imagePath) => {
+        hasImages = true;
+        const imageLines = this.imageRenderer.renderImage(imagePath.trim(), maxWidth);
+        if (imageLines.length > 0) {
+          // Add rendered image lines to output
+          imageLines.forEach((imgLine) => {
+            outputLines.push(bgEscape + imgLine);
+          });
+          return ""; // Remove the markdown syntax from display
+        }
+        return ""; // If image fails to render, just remove the syntax
+      });
+      
+      // Add the text content (if any remains after image extraction)
+      const textContent = lineWithImagesProcessed.trim();
+      if (textContent.length > 0) {
+        outputLines.push(bgEscape + textColor(textContent));
+      } else if (!hasImages) {
+        // Empty line with background: pad to maxWidth
+        outputLines.push(bgEscape + " ".repeat(maxWidth));
       } else {
-        outputLines.push(bgEscape);
+        // Had images, so already added to outputLines
+        outputLines.push(bgEscape + " ".repeat(maxWidth));
       }
     });
 
@@ -267,7 +303,7 @@ export class CLIRenderer {
 
     // Fill remaining space with background
     for (let i = 0; i < remainingLines; i++) {
-      outputLines.push(bgEscape);
+      outputLines.push(bgEscape + " ".repeat(maxWidth));
     }
 
     // Bottom border and controls

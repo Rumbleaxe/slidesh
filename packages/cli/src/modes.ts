@@ -180,6 +180,7 @@ export async function handlePdfMode(context: ModeContext): Promise<void> {
         const outputPath = path.join(fileDir, outputName);
         
         // Generate PDF with A4 size, landscape for better code display
+        // Enable print background to render themed backgrounds
         await page.pdf({
           path: outputPath,
           format: 'A4',
@@ -187,7 +188,9 @@ export async function handlePdfMode(context: ModeContext): Promise<void> {
           margin: { top: '0.5in', bottom: '0.5in', left: '0.5in', right: '0.5in' },
           displayHeaderFooter: true,
           headerTemplate: '<div style="font-size: 10px; width: 100%; text-align: center;"></div>',
-          footerTemplate: '<div style="font-size: 10px; width: 100%; text-align: center; padding-bottom: 0.5in;"><span class="pageNumber"></span> / <span class="totalPages"></span></div>'
+          footerTemplate: '<div style="font-size: 10px; width: 100%; text-align: center; padding-bottom: 0.5in;"><span class="pageNumber"></span> / <span class="totalPages"></span></div>',
+          printBackground: true,  // Enable background colors and images in PDF
+          preferCSSPageSize: false  // Use page.pdf dimensions
         });
         
         console.log(`✅ Successfully exported PDF: ${outputPath}`);
