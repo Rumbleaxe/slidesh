@@ -21,10 +21,28 @@ Format based on [Keep a Changelog](https://keepachangelog.com/), following [Sema
 
 ### Planned for v1.1.0+
 - Custom theme creator
-- Direct PDF export (Puppeteer)
 - Animations and transitions
 - Presenter mode with speaker notes
 - Live JSX blocks
+
+---
+
+## [0.1.1] — 2026-02-26
+
+### Added
+- **Direct PDF Export**: Implemented Puppeteer-based PDF generation
+  - Generates professional PDFs (A4 Landscape) in same folder as source markdown
+  - Output naming: `presentation.md` → `presentation.pdf`, `example.md` → `example.pdf`
+  - Page numbering and footer with theme information
+  - Works with all 5 bundled themes and custom themes
+  - Cross-platform support (Windows, macOS, Linux)
+
+### Changed
+- Updated README documentation with PDF export examples
+- Removed "Known Limitations" entry for PDF export
+
+### Dependencies
+- Added `puppeteer` for headless browser-based PDF rendering (97 packages)
 
 ---
 
@@ -95,7 +113,6 @@ Initial release: A complete dual-runtime presentation compiler with theming supp
 
 ### Known Issues
 
-- PDF export generates HTML (requires browser print-to-PDF or external tools)
 - Browser mode uses `file://` URLs (HTTP server recommended for full compatibility)
 - WezTerm theme fetching requires network access (local cache available after first fetch)
 - Terminal support optimized for modern emulators (degrades gracefully on basic ones)

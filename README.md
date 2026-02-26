@@ -138,7 +138,15 @@ Automatically opens in your default browser. Navigate with arrow keys or click.
 pnpm cli talk.md --mode pdf
 ```
 
-Creates an HTML file ready for print-to-PDF in your browser.
+Generates a professional PDF file (A4 Landscape) in the same folder as your markdown with page numbers and themed styling.
+
+```bash
+# Export with different theme
+pnpm cli talk.md --mode pdf --theme nord
+pnpm cli talk.md --mode pdf --theme gruvbox
+```
+
+PDFs are created in seconds using Puppeteer (headless browser rendering).
 
 ---
 
@@ -378,10 +386,11 @@ The `--save-config` flag persists your settings to `.slideshrc`.
 
 ## 🚨 Known Limitations
 
-- **PDF Export**: Generates HTML for browser print-to-PDF (not direct PDF generation)
 - **Browser Mode**: Uses `file://` URLs (HTTP server recommended for full compatibility)
 - **WezTerm Themes**: Requires network access for first-time fetching (cached after)
 - **Terminal Support**: Optimized for modern terminals; degrades gracefully on basic ones
+
+**Note**: PDF export now works directly using Puppeteer! No external tools needed.
 
 ---
 
