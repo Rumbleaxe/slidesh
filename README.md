@@ -75,6 +75,10 @@ pnpm build
 
 **Requirements**: Node.js 18+ and pnpm 8.15+
 
+**Note on npm vs pnpm**: 
+- **pnpm** is recommended (what this project uses)
+- **npm** users should use `npm run cli -- args` (with `--` separator) instead of `pnpm cli args`
+
 ### Basic Usage
 
 **1. Create a Markdown presentation** (`talk.md`):
@@ -117,7 +121,11 @@ Thank you!
 **2. Run in CLI**:
 
 ```bash
+# With pnpm (recommended)
 pnpm cli talk.md
+
+# With npm, use -- to pass arguments
+npm run cli -- talk.md
 ```
 
 Controls:
@@ -127,7 +135,11 @@ Controls:
 **3. Open in browser**:
 
 ```bash
+# With pnpm
 pnpm cli talk.md --mode browser
+
+# With npm
+npm run cli -- talk.md --mode browser
 ```
 
 Automatically opens in your default browser. Navigate with arrow keys or click.
@@ -135,18 +147,16 @@ Automatically opens in your default browser. Navigate with arrow keys or click.
 **4. Generate PDF**:
 
 ```bash
+# With pnpm
 pnpm cli talk.md --mode pdf
+pnpm cli talk.md --mode pdf --theme nord
+
+# With npm (note the -- before arguments)
+npm run cli -- talk.md --mode pdf
+npm run cli -- talk.md --mode pdf --theme nord
 ```
 
 Generates a professional PDF file (A4 Landscape) in the same folder as your markdown with page numbers and themed styling.
-
-```bash
-# Export with different theme
-pnpm cli talk.md --mode pdf --theme nord
-pnpm cli talk.md --mode pdf --theme gruvbox
-```
-
-PDFs are created in seconds using Puppeteer (headless browser rendering).
 
 ---
 
@@ -377,10 +387,16 @@ Create `presentation.slidesh.json` next to your slides:
 Command-line flags override all configuration:
 
 ```bash
+# With pnpm
 pnpm cli talk.md --theme solarized --mode browser --save-config
+
+# With npm (use -- to separate npm args from script args)
+npm run cli -- talk.md --theme solarized --mode browser --save-config
 ```
 
 The `--save-config` flag persists your settings to `.slideshrc`.
+
+**Note**: When using `npm run cli`, always use `--` before your arguments to prevent npm from trying to parse them.
 
 ---
 
